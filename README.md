@@ -32,6 +32,10 @@
 $ npm install
 ```
 
+## Editor configuration (VS Code)
+
+This repository includes VS Code configuration files in `.vscode/` with recommended settings (Prettier formatting and ESLint fixes) and `extensions.json` to suggest the **ESLint** and **Prettier** extensions. If you prefer personal settings, keep them in your user settings.
+
 ## Compile and run the project
 
 ```bash
