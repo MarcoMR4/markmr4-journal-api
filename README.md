@@ -36,6 +36,20 @@ $ npm install
 
 This repository includes VS Code configuration files in `.vscode/` with recommended settings (Prettier formatting and ESLint fixes) and `extensions.json` to suggest the **ESLint** and **Prettier** extensions. If you prefer personal settings, keep them in your user settings.
 
+## Environment variables
+
+Create a `.env` file in the project root with the following variables:
+
+```env
+JWT_SECRET=your_secret_key_here
+DATABASE_URL=postgresql://username:password@localhost:5432/database_name?schema=public
+```
+
+- `JWT_SECRET`: Secret key for JWT authentication.
+- `DATABASE_URL`: Connection string for your PostgreSQL database.
+
+You can use `.env.example` as a template.
+
 ## Compile and run the project
 
 ```bash
