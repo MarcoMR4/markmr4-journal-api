@@ -18,6 +18,14 @@ enum PostStatus {
   archived
 }
 
+enum CommentStatus {
+  pending
+  approved
+  rejected
+  spam
+  deleted
+}
+
 model Post {
   id        String     @id @default(uuid())
   title     String
@@ -26,4 +34,16 @@ model Post {
   slug      String     @unique
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  comments  PostComment[]
 }
+
+model PostComment {
+  id        String     @id @default(uuid())
+  content   String
+  status    CommentStatus @default(pending)
+  postId   String
+  post     Post        @relation(fields: [postId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
