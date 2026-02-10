@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PostCommentModule } from './postcomment/postcomment.module';
+import { PostTagModule } from './posttag/posttag.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PostCommentModule } from './postcomment/postcomment.module';
     PostModule,
     PrismaModule,
     PostCommentModule,
+    PostTagModule,
   ],
   controllers: [AppController],
   providers: [AppService],
