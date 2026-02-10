@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePostTagDto } from './dto/create-posttag.dto';
 import { UpdatePostTagDto } from './dto/update-posttag.dto';
@@ -7,7 +11,13 @@ import { UpdatePostTagDto } from './dto/update-posttag.dto';
 export class PostTagService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createPostTagDto: CreatePostTagDto) {
+  async create(createPostTagDto: CreatePostTagDto) {
+    const exists = await this.prisma.postTag.findUnique({
+      where: { name: createPostTagDto.name },
+    });
+    if (exists) {
+      throw new ConflictException('A post tag with this name already exists');
+    }
     return this.prisma.postTag.create({
       data: createPostTagDto,
     });
