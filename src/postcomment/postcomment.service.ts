@@ -13,6 +13,7 @@ export class PostCommentService {
         content: dto.content,
         status: dto.status ?? 'pending',
         post: { connect: { id: dto.postId } },
+        user: { connect: { id: dto.userId } },
       },
     });
   }

@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { PostStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -10,13 +11,16 @@ export class PostService {
   async create(dto: CreatePostDto) {
     const slug = this.slugify(dto.title);
 
+    const data = {
+      title: dto.title,
+      content: dto.content,
+      status: dto.status ?? PostStatus.draft,
+      slug,
+      user: { connect: { id: dto.userId } },
+    };
+
     return this.prisma.post.create({
-      data: {
-        title: dto.title,
-        content: dto.content,
-        status: dto.status ?? 'draft',
-        slug,
-      },
+      data,
     });
   }
 

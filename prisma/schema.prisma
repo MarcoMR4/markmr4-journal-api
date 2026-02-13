@@ -26,26 +26,57 @@ enum CommentStatus {
   deleted
 }
 
+enum RoleName {
+  admin
+  author
+  user
+}
+
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  nickname  String     @unique
+  email     String     @unique
+  password  String
+  isActive  Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  posts     Post[]
+  comments  PostComment[]
+  roles     UserRole[]
+}
+
 model Post {
   id        String     @id @default(uuid())
   title     String
   content   String
   status    PostStatus @default(draft)
   slug      String     @unique
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   comments  PostComment[]
   tagsOnPosts TagsOnPosts[]
+
+  @@index([userId])
+  @@index([status])
 }
 
 model PostComment {
   id        String     @id @default(uuid())
   content   String
   status    CommentStatus @default(pending)
-  postId   String
-  post     Post        @relation(fields: [postId], references: [id])
+  postId    String
+  post      Post       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Restrict)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+
+  @@index([postId])
+  @@index([userId])
+  @@index([status])
 }
 
 model PostTag {
@@ -56,9 +87,24 @@ model PostTag {
 
 model TagsOnPosts {
   postId   String
-  post     Post     @relation(fields: [postId], references: [id])
+  post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postTagId    String
-  postTag      PostTag  @relation(fields: [postTagId], references: [id])
+  postTag      PostTag  @relation(fields: [postTagId], references: [id], onDelete: Cascade)
   @@id([postId, postTagId])
+}
+
+model Role {
+  id          String     @id @default(uuid())
+  name        RoleName   @unique
+  description String?
+  users       UserRole[]
+}
+
+model UserRole {
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleId String
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  @@id([userId, roleId])
 }
 

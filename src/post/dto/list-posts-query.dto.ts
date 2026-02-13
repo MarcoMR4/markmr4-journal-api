@@ -1,7 +1,7 @@
 // src/posts/dto/list-posts.query.dto.ts
 import { Type } from 'class-transformer';
 import { IsOptional, IsString, Max, Min, IsEnum } from 'class-validator';
-import { PostStatus } from './create-post.dto';
+import { PostStatus } from '@prisma/client';
 
 export class ListPostsQueryDto {
   @IsOptional()

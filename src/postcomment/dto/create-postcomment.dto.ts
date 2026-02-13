@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEnum } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum, IsUUID } from 'class-validator';
 import { CommentStatus } from './comment-status.enum';
 
 export class CreatePostCommentDto {
@@ -12,4 +12,7 @@ export class CreatePostCommentDto {
   @IsString()
   @IsNotEmpty()
   postId: string;
+
+  @IsUUID()
+  userId: string;
 }

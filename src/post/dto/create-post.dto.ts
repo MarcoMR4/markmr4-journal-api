@@ -3,18 +3,11 @@
   IsNotEmpty,
   IsOptional,
   IsArray,
-  IsInt,
   MaxLength,
-  IsPositive,
   IsEnum,
+  IsUUID,
 } from 'class-validator';
-import { Type } from 'class-transformer';
-
-export enum PostStatus {
-  DRAFT = 'draft',
-  PUBLISHED = 'published',
-  ARCHIVED = 'archived',
-}
+import { PostStatus } from '@prisma/client';
 
 export class CreatePostDto {
   @IsString()
@@ -26,11 +19,8 @@ export class CreatePostDto {
   @IsNotEmpty()
   content: string;
 
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @IsPositive()
-  author?: number;
+  @IsUUID()
+  userId: string;
 
   @IsOptional()
   @IsArray()
