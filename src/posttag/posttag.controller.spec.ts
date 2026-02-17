@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PostTagController } from './posttag.controller';
+import { PostTagService } from './posttag.service';
 
 describe('PostTagController', () => {
   let controller: PostTagController;
@@ -7,6 +8,18 @@ describe('PostTagController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PostTagController],
+      providers: [
+        {
+          provide: PostTagService,
+          useValue: {
+            create: jest.fn(),
+            findAll: jest.fn(),
+            findOne: jest.fn(),
+            update: jest.fn(),
+            remove: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     controller = module.get<PostTagController>(PostTagController);
