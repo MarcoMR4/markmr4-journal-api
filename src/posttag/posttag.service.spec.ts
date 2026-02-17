@@ -1,12 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PostTagService } from './posttag.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 describe('PostTagService', () => {
   let service: PostTagService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PostTagService],
+      providers: [
+        PostTagService,
+        {
+          provide: PrismaService,
+          useValue: {
+            postTag: {
+              findUnique: jest.fn(),
+              create: jest.fn(),
+              findMany: jest.fn(),
+              update: jest.fn(),
+              delete: jest.fn(),
+            },
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<PostTagService>(PostTagService);
