@@ -8,6 +8,7 @@ import { PostModule } from './post/post.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PostCommentModule } from './postcomment/postcomment.module';
 import { PostTagModule } from './posttag/posttag.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PostTagModule } from './posttag/posttag.module';
     PrismaModule,
     PostCommentModule,
     PostTagModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
