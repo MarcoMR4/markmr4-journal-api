@@ -8,7 +8,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export class PostService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreatePostDto) {
+  async create(dto: CreatePostDto, userId: string) {
     const slug = this.slugify(dto.title);
 
     const data = {
@@ -16,7 +16,9 @@ export class PostService {
       content: dto.content,
       status: dto.status ?? PostStatus.draft,
       slug,
-      user: { connect: { id: dto.userId } },
+      user: {
+        connect: { id: userId },
+      },
     };
 
     return this.prisma.post.create({

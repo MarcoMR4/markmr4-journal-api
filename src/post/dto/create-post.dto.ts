@@ -5,7 +5,6 @@
   IsArray,
   MaxLength,
   IsEnum,
-  IsUUID,
 } from 'class-validator';
 import { PostStatus } from '@prisma/client';
 
@@ -18,9 +17,6 @@ export class CreatePostDto {
   @IsString()
   @IsNotEmpty()
   content: string;
-
-  @IsUUID()
-  userId: string;
 
   @IsOptional()
   @IsArray()

@@ -15,13 +15,23 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException({
+        statusCode: 401,
+        error: 'Unauthorized',
+        errorCode: 'AUTH_BAD_AUTH_HEADER',
+        message: 'Use Authorization: Bearer <token>',
+      });
     }
     try {
       const payload = await this.jwtService.verifyAsync(token);
       request['user'] = payload;
     } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException({
+        statusCode: 401,
+        error: 'Unauthorized',
+        errorCode: 'AUTH_INVALID_TOKEN',
+        message: 'Invalid token',
+      });
     }
     return true;
   }
