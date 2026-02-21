@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -13,31 +12,36 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
-    if (!token) {
+    const authHeader = request.headers.authorization;
+
+    if (!authHeader) {
       throw new UnauthorizedException({
-        statusCode: 401,
-        error: 'Unauthorized',
-        errorCode: 'AUTH_BAD_AUTH_HEADER',
-        message: 'Use Authorization: Bearer <token>',
+        errorCode: 'AUTH_MISSING_HEADER',
+        message: 'Authorization header is missing',
       });
     }
+
+    const [type, token] = authHeader.split(' ');
+
+    if (type !== 'Bearer' || !token) {
+      throw new UnauthorizedException({
+        errorCode: 'AUTH_BAD_FORMAT_HEADER',
+        message: 'Invalid authorization format. Expected: Bearer <token>',
+      });
+    }
+
     try {
       const payload = await this.jwtService.verifyAsync(token);
       request['user'] = payload;
-    } catch {
+    } catch (e: any) {
+      const isExpired =
+        e?.name === 'TokenExpiredError' || e?.message?.includes('expired');
+
       throw new UnauthorizedException({
-        statusCode: 401,
-        error: 'Unauthorized',
-        errorCode: 'AUTH_INVALID_TOKEN',
-        message: 'Invalid token',
+        errorCode: isExpired ? 'AUTH_TOKEN_EXPIRED' : 'AUTH_INVALID_TOKEN',
+        message: isExpired ? 'Authentication token expired' : 'Invalid token',
       });
     }
     return true;
-  }
-
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
   }
 }
