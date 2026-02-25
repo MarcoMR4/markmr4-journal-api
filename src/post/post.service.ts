@@ -11,29 +11,71 @@ export class PostService {
   async create(dto: CreatePostDto, userId: string) {
     const slug = this.slugify(dto.title);
 
-    const data = {
-      title: dto.title,
-      content: dto.content,
-      status: dto.status ?? PostStatus.draft,
-      slug,
-      user: {
-        connect: { id: userId },
-      },
-    };
+    // Filter unique tags if they exist and capitalize first letter
+    const uniqueTags = dto.tags
+      ? [
+          ...new Set(
+            dto.tags.map(
+              (tag) => tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase(),
+            ),
+          ),
+        ]
+      : [];
 
     return this.prisma.post.create({
-      data,
+      data: {
+        title: dto.title,
+        content: dto.content,
+        status: dto.status ?? PostStatus.draft,
+        slug,
+        user: {
+          connect: { id: userId },
+        },
+        tagsOnPosts: {
+          create: uniqueTags.map((tag) => ({
+            postTag: {
+              connectOrCreate: {
+                where: { name: tag },
+                create: { name: tag },
+              },
+            },
+          })),
+        },
+      },
+      include: {
+        tagsOnPosts: {
+          include: {
+            postTag: true,
+          },
+        },
+      },
     });
   }
 
   async findAll() {
     return this.prisma.post.findMany({
       orderBy: { createdAt: 'desc' },
+      include: {
+        tagsOnPosts: {
+          include: {
+            postTag: true,
+          },
+        },
+      },
     });
   }
 
   async findOne(id: string) {
-    const post = await this.prisma.post.findUnique({ where: { id } });
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+      include: {
+        tagsOnPosts: {
+          include: {
+            postTag: true,
+          },
+        },
+      },
+    });
     if (!post) throw new NotFoundException('Post not found');
     return post;
   }
