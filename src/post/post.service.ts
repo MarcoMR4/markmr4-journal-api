@@ -11,17 +11,6 @@ export class PostService {
   async create(dto: CreatePostDto, userId: string) {
     const slug = this.slugify(dto.title);
 
-    // Filter unique tags if they exist and capitalize first letter
-    const uniqueTags = dto.tags
-      ? [
-          ...new Set(
-            dto.tags.map(
-              (tag) => tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase(),
-            ),
-          ),
-        ]
-      : [];
-
     return this.prisma.post.create({
       data: {
         title: dto.title,
@@ -32,14 +21,7 @@ export class PostService {
           connect: { id: userId },
         },
         tagsOnPosts: {
-          create: uniqueTags.map((tag) => ({
-            postTag: {
-              connectOrCreate: {
-                where: { name: tag },
-                create: { name: tag },
-              },
-            },
-          })),
+          create: this.processTags(dto.tags),
         },
       },
       include: {
@@ -83,18 +65,61 @@ export class PostService {
   async update(id: string, dto: UpdatePostDto) {
     await this.findOne(id);
 
-    const data: any = { ...dto };
+    const { tags, ...rest } = dto;
+    const data: any = { ...rest };
+
+    if (tags) {
+      // Logic for handling tags update
+      const tagCreateInput = this.processTags(tags);
+      data.tagsOnPosts = {
+        deleteMany: {},
+        create: tagCreateInput,
+      };
+    }
+
     if (dto.title) data.slug = this.slugify(dto.title);
 
     return this.prisma.post.update({
       where: { id },
       data,
+      include: {
+        tagsOnPosts: {
+          include: {
+            postTag: true,
+          },
+        },
+      },
     });
   }
 
   async remove(id: string) {
     await this.findOne(id);
     return this.prisma.post.delete({ where: { id } });
+  }
+
+  private processTags(tags: string[]) {
+    const tagsToProcess = tags || [];
+
+    const uniqueTags = [
+      ...new Set(
+        tagsToProcess
+          .filter((tag) => tag.trim().length > 0)
+          .map(
+            (tag) =>
+              tag.trim().charAt(0).toUpperCase() +
+              tag.trim().slice(1).toLowerCase(),
+          ),
+      ),
+    ];
+
+    return uniqueTags.map((tag) => ({
+      postTag: {
+        connectOrCreate: {
+          where: { name: tag },
+          create: { name: tag },
+        },
+      },
+    }));
   }
 
   private slugify(value: string) {
