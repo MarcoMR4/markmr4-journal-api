@@ -17,20 +17,16 @@ export class AuthService {
     const user = await this.userService.findOne(username);
     if (!user) {
       throw new UnauthorizedException({
-        statusCode: 401,
-        error: 'Unauthorized',
         errorCode: 'AUTH_USER_NOT_FOUND',
-        message: 'User not found',
+        errorMessage: 'User not found',
       });
     }
 
     const passwordMatches = await bcrypt.compare(pass, user.password);
     if (!passwordMatches) {
       throw new UnauthorizedException({
-        statusCode: 401,
-        error: 'Unauthorized',
         errorCode: 'AUTH_INVALID_PASSWORD',
-        message: 'Invalid password',
+        errorMessage: 'Invalid password',
       });
     }
     const payload = { username: user.nickname, sub: user.id };
