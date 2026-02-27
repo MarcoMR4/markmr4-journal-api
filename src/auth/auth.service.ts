@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { UserService } from '../user/user.service';
+import { RoleName } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +30,14 @@ export class AuthService {
         errorMessage: 'Invalid password',
       });
     }
-    const payload = { username: user.nickname, sub: user.id };
+
+    const userRoles: RoleName[] = user.roles.map((ur) => ur.role.name);
+
+    const payload = {
+      username: user.nickname,
+      sub: user.id,
+      roles: userRoles,
+    };
     return {
       accessToken: this.jwtService.sign(payload),
     };

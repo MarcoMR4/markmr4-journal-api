@@ -1,4 +1,4 @@
-export type RoleName = 'admin' | 'author' | 'user';
+import { RoleName } from '@prisma/client';
 
 interface User {
   id: string;
@@ -13,3 +13,4 @@ interface User {
 }
 
 export default User;
+export { RoleName };
