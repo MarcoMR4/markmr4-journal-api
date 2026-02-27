@@ -17,7 +17,7 @@ import { RolesGuard } from './guards/roles.guard';
         if (!secret) {
           throw new Error('JWT_SECRET is not defined in environment');
         }
-        const expiresIn = config.get<string>('JWT_EXPIRES_IN') ?? '60s';
+        const expiresIn = config.get<string>('JWT_EXPIRES_IN') ?? '24h';
         return {
           global: true,
           secret,
