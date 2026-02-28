@@ -8,7 +8,7 @@ import {
   Get,
   Request,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { AuthGuard } from './auth.guard';
 import { signInDto } from './dto/auth.dto';
 

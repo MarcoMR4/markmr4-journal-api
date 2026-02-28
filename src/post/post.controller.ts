@@ -13,6 +13,8 @@ import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { RoleName } from 'src/types/user';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('posts')
 export class PostController {
@@ -20,6 +22,7 @@ export class PostController {
 
   @Post()
   @UseGuards(AuthGuard)
+  @Roles(RoleName.admin, RoleName.author)
   create(@Body() dto: CreatePostDto, @Request() req) {
     const userId = req.user.sub;
     return this.postService.create(dto, userId);
@@ -37,13 +40,16 @@ export class PostController {
 
   @Patch(':id')
   @UseGuards(AuthGuard)
-  update(@Param('id') id: string, @Body() dto: UpdatePostDto) {
-    return this.postService.update(id, dto);
+  @Roles(RoleName.admin, RoleName.author)
+  update(@Param('id') id: string, @Body() dto: UpdatePostDto, @Request() req) {
+    console.log('User ID in controller:', req.user.sub);
+    return this.postService.update(id, dto, req.user.sub, req.user.roles);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
-  remove(@Param('id') id: string) {
-    return this.postService.remove(id);
+  @Roles(RoleName.admin, RoleName.author)
+  remove(@Param('id') id: string, @Request() req) {
+    return this.postService.remove(id, req.userId, req.user.roles);
   }
 }
