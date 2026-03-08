@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { PostTagService } from './posttag.service';
-import { PostTagController } from './posttag.controller';
+import { PostTagService } from './post-tag.service';
+import { PostTagController } from './post-tag.controller';
 
 import { PrismaService } from '../prisma/prisma.service';
 

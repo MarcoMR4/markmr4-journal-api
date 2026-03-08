@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { PostCommentService } from './postcomment.service';
-import { PostCommentController } from './postcomment.controller';
+import { PostCommentService } from './post-comment.service';
+import { PostCommentController } from './post-comment.controller';
 
 @Module({
   providers: [PostCommentService],

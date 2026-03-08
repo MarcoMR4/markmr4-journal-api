@@ -7,9 +7,9 @@ import {
   Param,
   Body,
 } from '@nestjs/common';
-import { PostCommentService } from './postcomment.service';
-import { CreatePostCommentDto } from './dto/create-postcomment.dto';
-import { UpdatePostCommentDto } from './dto/update-postcomment.dto';
+import { PostCommentService } from './post-comment.service';
+import { CreatePostCommentDto } from './dto/create-post-comment.dto';
+import { UpdatePostCommentDto } from './dto/update-post-comment.dto';
 
 @Controller('post-comments')
 export class PostCommentController {

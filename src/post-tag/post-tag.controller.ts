@@ -7,7 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { PostTagService } from './posttag.service';
+import { PostTagService } from './post-tag.service';
 import { CreatePostTagDto } from './dto/create-posttag.dto';
 import { UpdatePostTagDto } from './dto/update-posttag.dto';
 

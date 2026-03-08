@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PostTagController } from './posttag.controller';
-import { PostTagService } from './posttag.service';
+import { PostTagController } from './post-tag.controller';
+import { PostTagService } from './post-tag.service';
 
 describe('PostTagController', () => {
   let controller: PostTagController;

@@ -1,21 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PostTagService } from './posttag.service';
+import { PostCommentService } from './post-comment.service';
 import { PrismaService } from '../prisma/prisma.service';
 
-describe('PostTagService', () => {
-  let service: PostTagService;
+describe('PostCommentService', () => {
+  let service: PostCommentService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        PostTagService,
+        PostCommentService,
         {
           provide: PrismaService,
           useValue: {
-            postTag: {
-              findUnique: jest.fn(),
+            postComment: {
               create: jest.fn(),
               findMany: jest.fn(),
+              findUnique: jest.fn(),
               update: jest.fn(),
               delete: jest.fn(),
             },
@@ -24,7 +24,7 @@ describe('PostTagService', () => {
       ],
     }).compile();
 
-    service = module.get<PostTagService>(PostTagService);
+    service = module.get<PostCommentService>(PostCommentService);
   });
 
   it('should be defined', () => {
