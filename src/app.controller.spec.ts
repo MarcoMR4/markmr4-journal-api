@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -8,15 +7,15 @@ describe('AppController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
     }).compile();
 
     appController = app.get<AppController>(AppController);
   });
 
   describe('root', () => {
-    it('should not return "Hello World without NestJS word"', () => {
-      expect(appController.getHello()).not.toBe('Hello World!');
+    it('should redirect to /api/v1/docs with 301', () => {
+      const result = appController.rootRedirect();
+      expect(result).toEqual({ url: '/api/v1/docs', statusCode: 301 });
     });
   });
 });
