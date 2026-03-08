@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
-  throw new Error('DATABASE_URL is not set.');
+  throw new Error('DATABASE_URL is not defined on the environment.');
 }
 
 const pool = new Pool({ connectionString });
