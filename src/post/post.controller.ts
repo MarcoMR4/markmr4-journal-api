@@ -13,7 +13,7 @@ import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { RoleName } from 'src/types/user';
+import { RoleName } from '@prisma/client';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('posts')
@@ -42,7 +42,6 @@ export class PostController {
   @UseGuards(AuthGuard)
   @Roles(RoleName.admin, RoleName.author)
   update(@Param('id') id: string, @Body() dto: UpdatePostDto, @Request() req) {
-    console.log('User ID in controller:', req.user.sub);
     return this.postService.update(id, dto, req.user.sub, req.user.roles);
   }
 

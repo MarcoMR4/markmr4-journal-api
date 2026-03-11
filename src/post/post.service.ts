@@ -73,8 +73,6 @@ export class PostService {
     userId: string,
     userRoles: RoleName[],
   ) {
-    console.log('user id for update:', userId);
-    console.log('user roles for update:', userRoles);
     await this.authorizationService.checkPostOwnership(id, userId, userRoles);
     await this.findOne(id);
 

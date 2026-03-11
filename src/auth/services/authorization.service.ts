@@ -31,8 +31,6 @@ export class AuthorizationService {
       });
     }
 
-    console.log('Post owner ID:', post.userId);
-    console.log('Current user ID:', userId);
     if (post.userId !== userId) {
       throw new ForbiddenException({
         errorCode: 'POST_EDIT_FORBIDDEN',
