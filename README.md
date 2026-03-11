@@ -102,6 +102,17 @@ Check out a few resources that may come in handy when working with NestJS:
 - To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
 - Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
+## Documentation for AI Agents & Developers
+
+This project is documented to facilitate collaboration with AI coding assistants (like GitHub Copilot). The following resources provide essential context about the project's structure, rules, and technology.
+
+- **[.github/copilot-instructions.md](.github/copilot-instructions.md)**: Primary context file for GitHub Copilot, summarizing the project and rules.
+- **[docs/stack.md](docs/stack.md)**: Detailed list of the technology stack, versions, and libraries used.
+- **[docs/architecture.md](docs/architecture.md)**: Explanation of the Modular Monolith architecture, patterns, and layers.
+- **[docs/rules.md](docs/rules.md)**: Comprehensive business rules, including authentication, authorization capabilities, and entity constraints.
+
+When using an AI agent, ensure it has access to these files to generate code that is consistent with the project's standards.
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
